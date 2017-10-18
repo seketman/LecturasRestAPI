@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Lecturas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="MedidorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Medidores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ModeloId" Type="int" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="GeoLocalizacion" Type="geography" />
+          <Property Name="UltimaLecturaId" Type="int" />
+          <Property Name="Domicilio" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ModelosDeMedidor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TiposDeValor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValoresLeidos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TipoId" Type="int" Nullable="false" />
+          <Property Name="Valor" Type="int" Nullable="false" />
+          <Property Name="LecturaId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Lecturas_Medidores">
+          <End Role="Medidores" Type="Self.Medidores" Multiplicity="1" />
+          <End Role="Lecturas" Type="Self.Lecturas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lecturas">
+              <PropertyRef Name="MedidorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medidores_Lecturas">
+          <End Role="Lecturas" Type="Self.Lecturas" Multiplicity="0..1" />
+          <End Role="Medidores" Type="Self.Medidores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lecturas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medidores">
+              <PropertyRef Name="UltimaLecturaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medidores_ModelosDeMedidor">
+          <End Role="ModelosDeMedidor" Type="Self.ModelosDeMedidor" Multiplicity="1" />
+          <End Role="Medidores" Type="Self.Medidores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModelosDeMedidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medidores">
+              <PropertyRef Name="ModeloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValoresLeidos_Lecturas">
+          <End Role="Lecturas" Type="Self.Lecturas" Multiplicity="0..1" />
+          <End Role="ValoresLeidos" Type="Self.ValoresLeidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lecturas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ValoresLeidos">
+              <PropertyRef Name="LecturaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValoresLeidos_TiposDeValor">
+          <End Role="TiposDeValor" Type="Self.TiposDeValor" Multiplicity="1" />
+          <End Role="ValoresLeidos" Type="Self.ValoresLeidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposDeValor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ValoresLeidos">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="Lecturas" EntityType="Self.Lecturas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medidores" EntityType="Self.Medidores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ModelosDeMedidor" EntityType="Self.ModelosDeMedidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TiposDeValor" EntityType="Self.TiposDeValor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValoresLeidos" EntityType="Self.ValoresLeidos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Lecturas_Medidores" Association="Self.FK_Lecturas_Medidores">
+            <End Role="Medidores" EntitySet="Medidores" />
+            <End Role="Lecturas" EntitySet="Lecturas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medidores_Lecturas" Association="Self.FK_Medidores_Lecturas">
+            <End Role="Lecturas" EntitySet="Lecturas" />
+            <End Role="Medidores" EntitySet="Medidores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medidores_ModelosDeMedidor" Association="Self.FK_Medidores_ModelosDeMedidor">
+            <End Role="ModelosDeMedidor" EntitySet="ModelosDeMedidor" />
+            <End Role="Medidores" EntitySet="Medidores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValoresLeidos_Lecturas" Association="Self.FK_ValoresLeidos_Lecturas">
+            <End Role="Lecturas" EntitySet="Lecturas" />
+            <End Role="ValoresLeidos" EntitySet="ValoresLeidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValoresLeidos_TiposDeValor" Association="Self.FK_ValoresLeidos_TiposDeValor">
+            <End Role="TiposDeValor" EntitySet="TiposDeValor" />
+            <End Role="ValoresLeidos" EntitySet="ValoresLeidos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Lectura">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MedidorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ValoresLeidos" Relationship="Self.FK_ValoresLeidos_Lecturas" FromRole="Lecturas" ToRole="ValoresLeidos" />
+        </EntityType>
+        <EntityType Name="Medidor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ModeloId" Type="Int32" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="GeoLocalizacion" Type="Geography" />
+          <Property Name="UltimaLecturaId" Type="Int32" />
+          <Property Name="Domicilio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Lecturas" Relationship="Self.FK_Lecturas_Medidores" FromRole="Medidores" ToRole="Lecturas" />
+          <NavigationProperty Name="UltimaLectura" Relationship="Self.FK_Medidores_Lecturas" FromRole="Medidores" ToRole="Lecturas" />
+          <NavigationProperty Name="ModeloDeMedidor" Relationship="Self.FK_Medidores_ModelosDeMedidor" FromRole="Medidores" ToRole="ModelosDeMedidor" />
+        </EntityType>
+        <EntityType Name="ModeloDeMedidor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoDeValor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValorLeido">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TipoId" Type="Int32" Nullable="false" />
+          <Property Name="LecturaId" Type="Int32" />
+          <Property Name="Valor" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Lecturas_Medidores">
+          <End Role="Medidores" Type="Models.Medidor" Multiplicity="1" />
+          <End Role="Lecturas" Type="Self.Lectura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lecturas">
+              <PropertyRef Name="MedidorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medidores_Lecturas">
+          <End Role="Lecturas" Type="Self.Lectura" Multiplicity="0..1" />
+          <End Role="Medidores" Type="Models.Medidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lecturas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medidores">
+              <PropertyRef Name="UltimaLecturaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValoresLeidos_Lecturas">
+          <End Role="Lecturas" Type="Self.Lectura" Multiplicity="0..1" />
+          <End Role="ValoresLeidos" Type="Models.ValorLeido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lecturas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ValoresLeidos">
+              <PropertyRef Name="LecturaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medidores_ModelosDeMedidor">
+          <End Role="ModelosDeMedidor" Type="Models.ModeloDeMedidor" Multiplicity="1" />
+          <End Role="Medidores" Type="Models.Medidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModelosDeMedidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medidores">
+              <PropertyRef Name="ModeloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValoresLeidos_TiposDeValor">
+          <End Role="TiposDeValor" Type="Models.TipoDeValor" Multiplicity="1" />
+          <End Role="ValoresLeidos" Type="Models.ValorLeido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposDeValor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ValoresLeidos">
+              <PropertyRef Name="TipoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LecturasContext" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="Lecturas" EntityType="Self.Lectura" />
+          <EntitySet Name="Medidores" EntityType="Models.Medidor" />
+          <EntitySet Name="ModelosDeMedidor" EntityType="Models.ModeloDeMedidor" />
+          <EntitySet Name="TiposDeValor" EntityType="Models.TipoDeValor" />
+          <EntitySet Name="ValoresLeidos" EntityType="Models.ValorLeido" />
+          <AssociationSet Name="FK_Lecturas_Medidores" Association="Self.FK_Lecturas_Medidores">
+            <End Role="Medidores" EntitySet="Medidores" />
+            <End Role="Lecturas" EntitySet="Lecturas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medidores_Lecturas" Association="Self.FK_Medidores_Lecturas">
+            <End Role="Lecturas" EntitySet="Lecturas" />
+            <End Role="Medidores" EntitySet="Medidores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValoresLeidos_Lecturas" Association="Self.FK_ValoresLeidos_Lecturas">
+            <End Role="Lecturas" EntitySet="Lecturas" />
+            <End Role="ValoresLeidos" EntitySet="ValoresLeidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medidores_ModelosDeMedidor" Association="Self.FK_Medidores_ModelosDeMedidor">
+            <End Role="ModelosDeMedidor" EntitySet="ModelosDeMedidor" />
+            <End Role="Medidores" EntitySet="Medidores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValoresLeidos_TiposDeValor" Association="Self.FK_ValoresLeidos_TiposDeValor">
+            <End Role="TiposDeValor" EntitySet="TiposDeValor" />
+            <End Role="ValoresLeidos" EntitySet="ValoresLeidos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="LecturasContext">
+          <EntitySetMapping Name="Lecturas">
+            <EntityTypeMapping TypeName="Models.Lectura">
+              <MappingFragment StoreEntitySet="Lecturas">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="MedidorId" ColumnName="MedidorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medidores">
+            <EntityTypeMapping TypeName="Models.Medidor">
+              <MappingFragment StoreEntitySet="Medidores">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ModeloId" ColumnName="ModeloId" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="GeoLocalizacion" ColumnName="GeoLocalizacion" />
+                <ScalarProperty Name="UltimaLecturaId" ColumnName="UltimaLecturaId" />
+                <ScalarProperty Name="Domicilio" ColumnName="Domicilio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ModelosDeMedidor">
+            <EntityTypeMapping TypeName="Models.ModeloDeMedidor">
+              <MappingFragment StoreEntitySet="ModelosDeMedidor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposDeValor">
+            <EntityTypeMapping TypeName="Models.TipoDeValor">
+              <MappingFragment StoreEntitySet="TiposDeValor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValoresLeidos">
+            <EntityTypeMapping TypeName="Models.ValorLeido">
+              <MappingFragment StoreEntitySet="ValoresLeidos">
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TipoId" ColumnName="TipoId" />
+                <ScalarProperty Name="LecturaId" ColumnName="LecturaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
